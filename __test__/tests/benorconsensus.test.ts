@@ -487,5 +487,6 @@ describe("Ben-Or decentralized consensus algorithm", () => {
     test.todo("Hidden test - Fault Tolerance Threshold - One node - 1 pt");
 
     test.todo("Hidden Test - 1 pt");
+    
   });
 });
