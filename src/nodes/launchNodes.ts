@@ -2,18 +2,17 @@ import { Value } from "../types";
 import { node } from "./node";
 
 export async function launchNodes(
-  N: number, // total number of nodes in the network
-  F: number, // number of faulty nodes in the network
-  initialValues: Value[], // initial values of each node
-  faultyList: boolean[] // list of faulty values for each node, true if the node is faulty, false otherwise
+  N: number, // Nombre total de nœuds
+  F: number, // Nombre de nœuds défectueux
+  initialValues: Value[], // Valeurs initiales de chaque nœud
+  faultyList: boolean[] // Liste des nœuds défectueux
 ) {
   if (initialValues.length !== faultyList.length || N !== initialValues.length)
-    throw new Error("Arrays don't match");
+    throw new Error("⚠️ Arrays don't match");
   if (faultyList.filter((el) => el === true).length !== F)
-    throw new Error("faultyList doesnt have F faulties");
+    throw new Error("⚠️ faultyList doesn't have F faulties");
 
   const promises = [];
-
   const nodesStates = new Array(N).fill(false);
 
   function nodesAreReady() {
@@ -22,10 +21,16 @@ export async function launchNodes(
 
   function setNodeIsReady(index: number) {
     nodesStates[index] = true;
+    console.log(`✅ Node ${index} is ready`);
   }
 
-  // launch nodes
+  console.log("🚀 Launching nodes...");
+  console.log(`🌍 Total Nodes: ${N}, Faulty Nodes: ${F}`);
+
   for (let index = 0; index < N; index++) {
+    console.log(
+      `📌 Launching Node ${index} | Initial Value: ${initialValues[index]} | Faulty: ${faultyList[index]}`
+    );
     const newPromise = node(
       index,
       N,
@@ -39,6 +44,7 @@ export async function launchNodes(
   }
 
   const servers = await Promise.all(promises);
-
+  console.log("✅ All nodes are up and running!");
+  
   return servers;
 }
